@@ -3,13 +3,17 @@ import SearchBar from './SearchBar'
 import youtube from '../apis/youtube'
 import VideoList from './VideoList'
 import VideoDetail from './VideoDetail'
+import NextPage from './NextPage'
 
 class App extends React.Component {
   constructor() {
     super()
     this.state = {
       videos: [],
-      selectedVideo: null
+      selectedVideo: null,
+      nextPage: '',
+      prevPage: '',
+      searchTerm: 'dogs'
     }
   }
 
@@ -23,10 +27,21 @@ class App extends React.Component {
         q: term
       }
     })
-    console.log(response)
     this.setState({
       videos: response.data.items,
-      selectedVideo: response.data.items[0]
+      selectedVideo: response.data.items[0],
+      nextPage: response.data.nextPageToken,
+      prevPage: response.data.prevPageToken,
+      searchTerm: term
+    })
+  }
+  
+  onNextPage = async (term, nextPage) => {
+    const response = await youtube.get('/search', {
+      params: {
+        q: term,
+        pageToken: nextPage
+      }
     })
   }
 
@@ -46,8 +61,9 @@ class App extends React.Component {
             <div className="five wide column">
               <VideoList 
                 onVideoSelect={this.onVideoSelect} 
-              videos={this.state.videos} 
+                videos={this.state.videos} 
               />
+              <button onChange={this.onNextPage(this.state.searchTerm, this.state.nextPage)}>Next page</button>
             </div>
           </div>
         </div>

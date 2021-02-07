@@ -63,7 +63,7 @@ class App extends React.Component {
                 onVideoSelect={this.onVideoSelect} 
                 videos={this.state.videos} 
               />
-              <button onChange={this.onNextPage(this.state.searchTerm, this.state.nextPage)}>Next page</button>
+              <button onSubmit={this.onNextPage(this.state.searchTerm, this.state.nextPage)}>Next page</button>
             </div>
           </div>
         </div>
